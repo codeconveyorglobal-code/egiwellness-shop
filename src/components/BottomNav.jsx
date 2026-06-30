@@ -1,7 +1,8 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Home, Store, Search, ShoppingBag } from 'lucide-react'
+import { Home, Store, Search, ShoppingBag, Heart } from 'lucide-react'
 import { useCart } from '../store/cart'
+import { useWishlist } from '../store/wishlist'
 
 export default function BottomNav() {
   const { pathname, search } = useLocation()
@@ -9,12 +10,14 @@ export default function BottomNav() {
   const count = useCart((s) => Object.values(s.items).reduce((a, b) => a + b, 0))
   const openCart = useCart((s) => s.open)
   const cartOpen = useCart((s) => s.isOpen)
+  const wishCount = useWishlist((s) => s.ids.length)
 
   const isShop = pathname.startsWith('/shop')
   const items = [
     { key: 'home', label: 'Home', icon: Home, active: pathname === '/', onClick: () => navigate('/') },
     { key: 'shop', label: 'Shop', icon: Store, active: isShop && !search.includes('q='), onClick: () => navigate('/shop') },
     { key: 'search', label: 'Search', icon: Search, active: search.includes('q='), onClick: () => navigate('/shop?q=') },
+    { key: 'wishlist', label: 'Wishlist', icon: Heart, active: pathname.startsWith('/wishlist'), onClick: () => navigate('/wishlist'), badge: wishCount },
     { key: 'cart', label: 'Cart', icon: ShoppingBag, active: cartOpen, onClick: openCart, badge: count },
   ]
 

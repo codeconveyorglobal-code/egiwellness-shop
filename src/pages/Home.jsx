@@ -14,6 +14,7 @@ import {
 import { categories, products, bestsellers } from '../data/products'
 import ProductCard from '../components/ProductCard'
 import BannerSlider from '../components/BannerSlider'
+import FlashSale from '../components/FlashSale'
 
 const iconMap = { Sparkles, Pill, House, HeartPulse }
 
@@ -236,6 +237,9 @@ export default function Home() {
           })}
         </div>
       </section>
+
+      {/* ===== FLASH SALE ===== */}
+      <FlashSale />
 
       {/* ===== BESTSELLERS ===== */}
       <section className="section-pad mt-16 sm:mt-20">

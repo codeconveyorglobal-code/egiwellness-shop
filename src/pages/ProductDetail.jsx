@@ -10,11 +10,13 @@ import {
   ShieldCheck,
   Leaf,
   Check,
+  Heart,
 } from 'lucide-react'
 import { useState } from 'react'
 import { productsById, getProductsByCategory, categoriesById } from '../data/products'
 import { inr, discountPct } from '../lib/format'
 import { useCart } from '../store/cart'
+import { useWishlist } from '../store/wishlist'
 import ProductMedia from '../components/ProductMedia'
 import ProductCard from '../components/ProductCard'
 
@@ -29,6 +31,8 @@ export default function ProductDetail() {
   const navigate = useNavigate()
   const product = productsById[id]
   const add = useCart((s) => s.add)
+  const wished = useWishlist((s) => (product ? s.ids.includes(product.id) : false))
+  const toggleWish = useWishlist((s) => s.toggle)
   const [qty, setQty] = useState(1)
   const [added, setAdded] = useState(false)
 
@@ -173,7 +177,7 @@ export default function ProductDetail() {
               </button>
             </div>
 
-            <button onClick={onAdd} className="btn-primary min-w-[200px] flex-1 py-4 text-base">
+            <button onClick={onAdd} className="btn-primary min-w-[180px] flex-1 py-4 text-base">
               {added ? (
                 <>
                   <Check className="h-5 w-5" /> Added to cart
@@ -183,6 +187,18 @@ export default function ProductDetail() {
                   <ShoppingBag className="h-5 w-5" /> Add to cart · {inr(product.price * qty)}
                 </>
               )}
+            </button>
+
+            <button
+              onClick={() => toggleWish(product.id)}
+              aria-label={wished ? 'Remove from wishlist' : 'Add to wishlist'}
+              className={`btn h-[58px] w-[58px] shrink-0 rounded-full border transition-all ${
+                wished
+                  ? 'border-rose-200 bg-rose-50 text-rose-500'
+                  : 'border-ink-900/10 bg-white text-ink-500 hover:border-rose-200 hover:text-rose-500'
+              }`}
+            >
+              <Heart className={`h-6 w-6 ${wished ? 'fill-rose-500' : ''}`} />
             </button>
           </div>
         </motion.div>

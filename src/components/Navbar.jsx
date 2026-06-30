@@ -1,8 +1,9 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ShoppingBag, Search, Menu, X, Leaf, ChevronRight } from 'lucide-react'
+import { ShoppingBag, Search, Menu, X, Leaf, ChevronRight, Heart } from 'lucide-react'
 import { useState, useEffect, useRef } from 'react'
 import { useCart } from '../store/cart'
+import { useWishlist } from '../store/wishlist'
 import { categories } from '../data/products'
 
 const mainLinks = [
@@ -14,6 +15,7 @@ const catLinks = categories.map((c) => ({ to: `/shop?cat=${c.id}`, label: c.name
 export default function Navbar() {
   const count = useCart((s) => Object.values(s.items).reduce((a, b) => a + b, 0))
   const openCart = useCart((s) => s.open)
+  const wishCount = useWishlist((s) => s.ids.length)
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
@@ -136,6 +138,28 @@ export default function Navbar() {
             tabIndex={searchOpen ? 0 : -1}
           />
         </motion.form>
+
+        {/* Wishlist */}
+        <Link
+          to="/wishlist"
+          className="relative ml-auto hidden h-11 w-11 shrink-0 place-items-center rounded-full border border-ink-900/[0.08] bg-white/70 backdrop-blur transition-all hover:border-rose-300 hover:shadow-glow-sm sm:grid sm:ml-0"
+          aria-label="Wishlist"
+        >
+          <Heart className="h-5 w-5 text-ink-800" />
+          <AnimatePresence>
+            {wishCount > 0 && (
+              <motion.span
+                key={wishCount}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 0 }}
+                className="absolute -right-1 -top-1 grid h-5 min-w-[20px] place-items-center rounded-full bg-rose-500 px-1 text-[11px] font-bold text-white shadow-glow-sm"
+              >
+                {wishCount}
+              </motion.span>
+            )}
+          </AnimatePresence>
+        </Link>
 
         {/* Cart */}
         <button

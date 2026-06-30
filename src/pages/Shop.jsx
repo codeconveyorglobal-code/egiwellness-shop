@@ -17,8 +17,11 @@ export default function Shop() {
   const cat = params.get('cat') || 'all'
   const urlQ = params.get('q') || ''
 
+  const urlSort = params.get('sort')
   const [q, setQ] = useState(urlQ)
-  const [sort, setSort] = useState('popular')
+  const [sort, setSort] = useState(
+    ['popular', 'price-asc', 'price-desc', 'discount'].includes(urlSort) ? urlSort : 'popular'
+  )
 
   useEffect(() => setQ(urlQ), [urlQ])
 
