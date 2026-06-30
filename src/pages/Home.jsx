@@ -287,13 +287,13 @@ export default function Home() {
             </div>
           </motion.div>
 
-          {/* text */}
+          {/* text — hidden on phones (keep only the photos there) */}
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="order-1 lg:order-2"
+            className="order-1 hidden lg:order-2 lg:block"
           >
             <p className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.22em] text-brand-600">
               <span className="h-px w-6 bg-brand-500/60" /> Our promise
