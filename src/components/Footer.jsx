@@ -1,16 +1,37 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Leaf, Instagram, Facebook, Twitter, Mail, Phone } from 'lucide-react'
+import { Leaf, Instagram, Facebook, Twitter, Mail, Phone, Check } from 'lucide-react'
 import { categories } from '../data/products'
 
 const policies = [
-  'Disclaimer',
-  'Payment Policy',
-  'Refund Policy',
-  'Shipping Policy',
-  'Privacy Policy',
+  { label: 'Disclaimer', slug: 'disclaimer' },
+  { label: 'Payment Policy', slug: 'payment' },
+  { label: 'Refund Policy', slug: 'refund' },
+  { label: 'Shipping Policy', slug: 'shipping' },
+  { label: 'Privacy Policy', slug: 'privacy' },
 ]
 
+const socials = [
+  { Icon: Instagram, href: 'https://www.instagram.com/', label: 'Instagram' },
+  { Icon: Facebook, href: 'https://www.facebook.com/', label: 'Facebook' },
+  { Icon: Twitter, href: 'https://twitter.com/', label: 'Twitter' },
+]
+
+const EMAIL = 'care@egiwellness.in'
+const PHONE = '+910000000000'
+
 export default function Footer() {
+  const [email, setEmail] = useState('')
+  const [joined, setJoined] = useState(false)
+
+  const onJoin = (e) => {
+    e.preventDefault()
+    if (!email.trim()) return
+    setJoined(true)
+    setEmail('')
+    setTimeout(() => setJoined(false), 2500)
+  }
+
   return (
     <footer className="mt-24 border-t border-ink-900/[0.07] bg-sand-50">
       <div className="section-pad grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-4">
@@ -28,10 +49,13 @@ export default function Footer() {
             delivery, great value.
           </p>
           <div className="mt-5 flex gap-2">
-            {[Instagram, Facebook, Twitter].map((Icon, i) => (
+            {socials.map(({ Icon, href, label }) => (
               <a
-                key={i}
-                href="#"
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
                 className="grid h-9 w-9 place-items-center rounded-full border border-ink-900/10 bg-white text-ink-500 transition-colors hover:text-brand-600"
               >
                 <Icon className="h-4 w-4" />
@@ -55,6 +79,11 @@ export default function Footer() {
                 All Products
               </Link>
             </li>
+            <li>
+              <Link to="/wishlist" className="hover:text-brand-600">
+                Wishlist
+              </Link>
+            </li>
           </ul>
         </div>
 
@@ -62,10 +91,10 @@ export default function Footer() {
           <h4 className="mb-4 font-semibold text-ink-900">Policies</h4>
           <ul className="space-y-2.5 text-sm text-ink-500">
             {policies.map((p) => (
-              <li key={p}>
-                <a href="#" className="hover:text-brand-600">
-                  {p}
-                </a>
+              <li key={p.slug}>
+                <Link to={`/policy/${p.slug}`} className="hover:text-brand-600">
+                  {p.label}
+                </Link>
               </li>
             ))}
           </ul>
@@ -74,23 +103,34 @@ export default function Footer() {
         <div>
           <h4 className="mb-4 font-semibold text-ink-900">Get in touch</h4>
           <ul className="space-y-3 text-sm text-ink-500">
-            <li className="flex items-center gap-2">
-              <Mail className="h-4 w-4 text-brand-600" /> care@egiwellness.in
+            <li>
+              <a href={`mailto:${EMAIL}`} className="flex items-center gap-2 hover:text-brand-600">
+                <Mail className="h-4 w-4 text-brand-600" /> {EMAIL}
+              </a>
             </li>
-            <li className="flex items-center gap-2">
-              <Phone className="h-4 w-4 text-brand-600" /> +91 00000 00000
+            <li>
+              <a href={`tel:${PHONE}`} className="flex items-center gap-2 hover:text-brand-600">
+                <Phone className="h-4 w-4 text-brand-600" /> +91 00000 00000
+              </a>
             </li>
           </ul>
-          <div className="mt-5 rounded-2xl border border-ink-900/[0.06] bg-white p-4 shadow-soft">
+          <form onSubmit={onJoin} className="mt-5 rounded-2xl border border-ink-900/[0.06] bg-white p-4 shadow-soft">
             <p className="text-xs text-ink-500">Join our newsletter for offers &amp; tips.</p>
             <div className="mt-3 flex gap-2">
               <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email address"
                 className="w-full rounded-full bg-sand-100 px-3 py-2 text-xs text-ink-800 outline-none placeholder:text-ink-400"
               />
-              <button className="btn-primary px-4 py-2 text-xs">Join</button>
+              <button type="submit" className="btn-primary shrink-0 px-4 py-2 text-xs">
+                {joined ? <Check className="h-4 w-4" /> : 'Join'}
+              </button>
             </div>
-          </div>
+            {joined && <p className="mt-2 text-xs font-medium text-brand-600">Subscribed — thank you!</p>}
+          </form>
         </div>
       </div>
 
