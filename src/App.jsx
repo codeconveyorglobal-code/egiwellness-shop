@@ -4,6 +4,7 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import CartDrawer from './components/CartDrawer'
 import BottomNav from './components/BottomNav'
+import InstallPrompt from './components/InstallPrompt'
 import Home from './pages/Home'
 import Shop from './pages/Shop'
 import ProductDetail from './pages/ProductDetail'
@@ -39,6 +40,7 @@ export default function App() {
       <div className="h-24 lg:hidden" />
       <CartDrawer />
       <BottomNav />
+      <InstallPrompt />
     </div>
   )
 }
